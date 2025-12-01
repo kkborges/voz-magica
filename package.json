@@ -9,7 +9,16 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "setup:native": "node scripts/setup-native.js",
+    "clean": "rm -rf node_modules && rm -rf ios/Pods && rm -rf ios/build && rm -rf android/build && rm -rf android/app/build",
+    "clean:cache": "watchman watch-del-all && rm -rf $TMPDIR/react-* && npm start -- --reset-cache",
+    "pods": "cd ios && pod install && cd ..",
+    "android:clean": "cd android && ./gradlew clean && cd ..",
+    "android:build": "cd android && ./gradlew assembleDebug && cd ..",
+    "android:release": "cd android && ./gradlew assembleRelease && cd ..",
+    "android:bundle": "cd android && ./gradlew bundleRelease && cd ..",
+    "postinstall": "npx patch-package"
   },
   "dependencies": {
     "react": "18.2.0",
