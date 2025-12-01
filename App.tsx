@@ -4,27 +4,24 @@
  */
 
 import React, { useEffect } from 'react';
-import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Colors } from '@/constants';
+import { AppNavigator } from '@/navigation/AppNavigator';
 
 function App(): JSX.Element {
   useEffect(() => {
     // Inicialização do app
     console.log('Voz Mágica - Iniciando aplicativo...');
-
-    // TODO: Carregar perfis, configurações, etc.
   }, []);
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaProvider>
         <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-        {/* TODO: Adicionar navegação e telas */}
-        {/* <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer> */}
-      </SafeAreaView>
+        <AppNavigator />
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
@@ -32,7 +29,6 @@ function App(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
 });
 
