@@ -1,0 +1,434 @@
+/* Estilos da página GamePlay */
+
+.gameplay {
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.gameplay__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.gameplay__score {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.gameplay__score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--gray-100);
+  border-radius: var(--radius-md);
+}
+
+.gameplay__score-label {
+  font-size: var(--font-size-xs);
+  color: var(--gray-600);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 2px;
+}
+
+.gameplay__score-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+}
+
+/* Main */
+.gameplay__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  align-items: center;
+}
+
+/* Word Card */
+.gameplay__word-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.gameplay__word-image {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.gameplay__word-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-fun);
+  font-size: 120px;
+  font-weight: var(--font-weight-bold);
+  color: white;
+  animation: bounce 2s infinite;
+}
+
+.gameplay__word-text {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-md);
+  letter-spacing: 2px;
+}
+
+.gameplay__syllables {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.gameplay__syllable {
+  background: var(--gradient-sunshine);
+  color: var(--gray-800);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  animation: pulse 1s infinite;
+}
+
+.gameplay__hint {
+  font-size: var(--font-size-lg);
+  color: var(--gray-600);
+  font-style: italic;
+  margin-top: var(--spacing-md);
+}
+
+/* Voice Area */
+.gameplay__voice-area {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-lg);
+  min-width: 500px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xl);
+}
+
+.gameplay__intro {
+  text-align: center;
+}
+
+.gameplay__intro-title {
+  font-size: var(--font-size-2xl);
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-md);
+}
+
+.gameplay__intro-title strong {
+  color: var(--primary);
+}
+
+.gameplay__intro-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--gray-600);
+}
+
+/* Botão do Microfone */
+.gameplay__mic-button {
+  width: 180px;
+  height: 180px;
+  border-radius: var(--radius-round);
+  border: none;
+  background: var(--gradient-primary);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.2), 0 8px 24px rgba(255, 107, 157, 0.4);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.gameplay__mic-button:hover:not(:disabled) {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 0 rgba(0, 0, 0, 0.2), 0 12px 32px rgba(255, 107, 157, 0.5);
+}
+
+.gameplay__mic-button:active:not(:disabled) {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2), 0 4px 16px rgba(255, 107, 157, 0.3);
+}
+
+.gameplay__mic-button--listening {
+  animation: pulse 1.5s infinite;
+  background: var(--gradient-success);
+}
+
+.gameplay__mic-button--listening::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  animation: ripple 1.5s infinite;
+}
+
+@keyframes ripple {
+  0% {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+  }
+}
+
+.gameplay__mic-icon {
+  font-size: var(--font-size-5xl);
+  position: relative;
+  z-index: 1;
+}
+
+.gameplay__mic-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  position: relative;
+  z-index: 1;
+}
+
+/* Transcript */
+.gameplay__transcript {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xl);
+  color: var(--gray-700);
+}
+
+.gameplay__transcript strong {
+  color: var(--primary);
+}
+
+/* Feedback */
+.gameplay__feedback {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  width: 100%;
+}
+
+.gameplay__feedback--perfect {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border: 3px solid var(--success);
+}
+
+.gameplay__feedback--good {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  border: 3px solid var(--info);
+}
+
+.gameplay__feedback--close {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+  border: 3px solid var(--warning);
+}
+
+.gameplay__feedback--incorrect {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  border: 3px solid var(--error);
+}
+
+.gameplay__feedback-icon {
+  font-size: 80px;
+  margin-bottom: var(--spacing-md);
+  animation: bounce 1s;
+}
+
+.gameplay__feedback-message {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-md);
+}
+
+.gameplay__feedback-encouragement {
+  font-size: var(--font-size-xl);
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-lg);
+}
+
+.gameplay__feedback-suggestions {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+}
+
+.gameplay__feedback-suggestion {
+  font-size: var(--font-size-lg);
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.gameplay__feedback-suggestion:last-child {
+  margin-bottom: 0;
+}
+
+.gameplay__feedback-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  margin-top: var(--spacing-xl);
+}
+
+/* Botões de ajuda */
+.gameplay__help-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Celebração */
+.celebration-confetti {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px;
+  letter-spacing: 20px;
+  animation: celebrate 3s ease-out;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+@keyframes celebrate {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.5) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5) rotate(360deg);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .gameplay {
+    padding: var(--spacing-md);
+  }
+
+  .gameplay__header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .gameplay__score {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .gameplay__word-card {
+    padding: var(--spacing-lg);
+  }
+
+  .gameplay__word-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .gameplay__word-image-placeholder {
+    font-size: 80px;
+  }
+
+  .gameplay__word-text {
+    font-size: var(--font-size-4xl);
+  }
+
+  .gameplay__voice-area {
+    min-width: auto;
+    width: 100%;
+    padding: var(--spacing-lg);
+    min-height: 250px;
+  }
+
+  .gameplay__mic-button {
+    width: 150px;
+    height: 150px;
+  }
+
+  .gameplay__mic-icon {
+    font-size: var(--font-size-4xl);
+  }
+
+  .gameplay__mic-text {
+    font-size: var(--font-size-base);
+  }
+
+  .gameplay__feedback-icon {
+    font-size: 60px;
+  }
+
+  .gameplay__feedback-message {
+    font-size: var(--font-size-2xl);
+  }
+
+  .gameplay__feedback-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .gameplay__feedback-actions button {
+    width: 100%;
+  }
+
+  .gameplay__help-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .gameplay__help-buttons button {
+    width: 100%;
+  }
+}
