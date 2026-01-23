@@ -1,0 +1,127 @@
+/* Estilos do GameCard */
+
+.game-card {
+  position: relative;
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.game-card:hover:not(.game-card--locked) {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.game-card--locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.game-card__icon {
+  font-size: var(--font-size-5xl);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  animation: bounce 2s infinite;
+}
+
+.game-card--locked .game-card__icon {
+  filter: grayscale(1);
+  animation: none;
+}
+
+.game-card__content {
+  text-align: center;
+}
+
+.game-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.game-card__description {
+  font-size: var(--font-size-base);
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
+.game-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 2px solid var(--gray-200);
+}
+
+.game-card__age {
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+  font-weight: var(--font-weight-medium);
+}
+
+.game-card__difficulty {
+  font-size: var(--font-size-sm);
+}
+
+.game-card__difficulty--easy {
+  color: var(--success);
+}
+
+.game-card__difficulty--medium {
+  color: var(--warning);
+}
+
+.game-card__difficulty--hard {
+  color: var(--error);
+}
+
+/* Lock overlay */
+.game-card__lock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  border-radius: var(--radius-xl);
+}
+
+.game-card__lock-icon {
+  font-size: var(--font-size-4xl);
+  animation: shake 0.5s infinite;
+}
+
+.game-card__lock-text {
+  color: white;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .game-card {
+    padding: var(--spacing-md);
+  }
+
+  .game-card__icon {
+    font-size: var(--font-size-4xl);
+  }
+
+  .game-card__title {
+    font-size: var(--font-size-lg);
+  }
+}
