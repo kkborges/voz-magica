@@ -1,0 +1,103 @@
+/* ParticleSystem - Sistema de Partículas */
+
+.particle-system {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Confetti */
+.particle--confetti {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Stars */
+.particle--stars {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hearts */
+.particle--hearts {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sparkles */
+.particle--sparkles {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Bubbles */
+.particle--bubbles {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent);
+}
+
+/* Fireworks */
+.particle--fireworks {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Coins */
+.particle--coins {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Emojis */
+.particle--emojis {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.particle__emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* Desempenho */
+@media (prefers-reduced-motion: reduce) {
+  .particle-system {
+    display: none;
+  }
+}
