@@ -1,0 +1,280 @@
+/* Interactive Button - Design System Atômico */
+
+.interactive-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-bold);
+
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  overflow: hidden;
+
+  transition: all var(--transition-normal);
+
+  /* 3D effect */
+  transform-style: preserve-3d;
+  perspective: 1000px;
+
+  /* Disable text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Variantes de cor */
+.interactive-button--primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow:
+    0 4px 0 0 var(--primary-dark),
+    0 8px 16px rgba(255, 107, 157, 0.3);
+}
+
+.interactive-button--secondary {
+  background: var(--gradient-sunshine);
+  color: var(--gray-800);
+  box-shadow:
+    0 4px 0 0 var(--secondary-dark),
+    0 8px 16px rgba(255, 169, 77, 0.3);
+}
+
+.interactive-button--success {
+  background: var(--gradient-success);
+  color: white;
+  box-shadow:
+    0 4px 0 0 var(--success-dark),
+    0 8px 16px rgba(107, 207, 127, 0.3);
+}
+
+.interactive-button--danger {
+  background: linear-gradient(135deg, var(--error) 0%, #ff4757 100%);
+  color: white;
+  box-shadow:
+    0 4px 0 0 #d63447,
+    0 8px 16px rgba(255, 107, 107, 0.3);
+}
+
+.interactive-button--fun {
+  background: var(--gradient-fun);
+  color: white;
+  box-shadow:
+    0 4px 0 0 var(--blue),
+    0 8px 16px rgba(91, 141, 239, 0.3);
+}
+
+.interactive-button--magical {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  color: white;
+  box-shadow:
+    0 4px 0 0 #764ba2,
+    0 8px 16px rgba(102, 126, 234, 0.4);
+  animation: magicalShimmer 3s infinite;
+}
+
+@keyframes magicalShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Tamanhos */
+.interactive-button--sm {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.interactive-button--md {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+
+.interactive-button--lg {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  font-size: var(--font-size-xl);
+}
+
+.interactive-button--xl {
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  font-size: var(--font-size-2xl);
+}
+
+.interactive-button--jumbo {
+  padding: var(--spacing-2xl) var(--spacing-3xl);
+  font-size: var(--font-size-4xl);
+  border-radius: var(--radius-xl);
+}
+
+/* Estados */
+.interactive-button:hover:not(.interactive-button--disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.interactive-button:active:not(.interactive-button--disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+.interactive-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  filter: grayscale(0.5);
+}
+
+.interactive-button--loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+/* Ícones */
+.interactive-button__icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.2em;
+  transition: transform var(--transition-fast);
+}
+
+/* Spinner de loading */
+.interactive-button__spinner {
+  width: 20px;
+  height: 20px;
+}
+
+.spinner-circle {
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+}
+
+/* Efeito Ripple */
+.interactive-button__ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Efeito Glow */
+.interactive-button__glow {
+  position: absolute;
+  inset: -2px;
+  background: inherit;
+  border-radius: inherit;
+  opacity: 0.5;
+  filter: blur(10px);
+  z-index: -1;
+  transition: opacity var(--transition-normal);
+}
+
+.interactive-button:hover .interactive-button__glow {
+  opacity: 0.8;
+  animation: glowPulse 1.5s infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+/* Confetti particles */
+.confetti-particle {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: confettiFall 1s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--vx), calc(var(--vy) + 200px)) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Efeito de brilho ao passar o mouse */
+.interactive-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.interactive-button:hover::before {
+  left: 100%;
+}
+
+/* Animação de pulse para botões especiais */
+@keyframes buttonPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .interactive-button--jumbo {
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive-button,
+  .interactive-button__ripple,
+  .confetti-particle,
+  .interactive-button__glow {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Focus para acessibilidade */
+.interactive-button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
