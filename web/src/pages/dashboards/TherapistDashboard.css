@@ -1,0 +1,266 @@
+/* TherapistDashboard - Dashboard do Fonoaudiólogo */
+
+.therapist-dashboard {
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.therapist-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.therapist-dashboard__title {
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.therapist-dashboard__subtitle {
+  font-size: 16px;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.therapist-dashboard__nav {
+  display: flex;
+  gap: var(--spacing-sm);
+  background: white;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.therapist-dashboard__nav-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.therapist-dashboard__nav-btn:hover {
+  background: var(--gray-100);
+}
+
+.therapist-dashboard__nav-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Stats Grid */
+.therapist-dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Main Grid */
+.therapist-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.therapist-dashboard__card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.therapist-dashboard__card--full {
+  grid-column: 1 / -1;
+}
+
+.therapist-dashboard__card-title {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+/* Upcoming Sessions */
+.therapist-dashboard__upcoming {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Patients View */
+.therapist-dashboard__filters {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.therapist-dashboard__search {
+  flex: 1;
+  min-width: 250px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  transition: all var(--transition-fast);
+}
+
+.therapist-dashboard__search:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.therapist-dashboard__sort {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.therapist-dashboard__sort:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Analysis View */
+.therapist-dashboard__analysis-info {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--info-light);
+  border-left: 4px solid var(--info);
+  border-radius: var(--radius-md);
+}
+
+.therapist-dashboard__analysis-info h3 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--gray-900);
+}
+
+.therapist-dashboard__analysis-info ul {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+}
+
+.therapist-dashboard__analysis-info li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+/* Prescription Form */
+.therapist-dashboard__form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.therapist-dashboard__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.therapist-dashboard__form-group--full {
+  grid-column: 1 / -1;
+}
+
+.therapist-dashboard__form-group label {
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  font-size: 14px;
+}
+
+.therapist-dashboard__select,
+.therapist-dashboard__input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  transition: all var(--transition-fast);
+}
+
+.therapist-dashboard__select:focus,
+.therapist-dashboard__input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.therapist-dashboard__textarea {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-family: var(--font-primary);
+  resize: vertical;
+  transition: all var(--transition-fast);
+}
+
+.therapist-dashboard__textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.therapist-dashboard__form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .therapist-dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .therapist-dashboard__card--full {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .therapist-dashboard {
+    padding: var(--spacing-md);
+  }
+
+  .therapist-dashboard__header {
+    flex-direction: column;
+  }
+
+  .therapist-dashboard__nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .therapist-dashboard__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .therapist-dashboard__form {
+    grid-template-columns: 1fr;
+  }
+
+  .therapist-dashboard__upcoming {
+    grid-template-columns: 1fr;
+  }
+}

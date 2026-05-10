@@ -1,0 +1,553 @@
+/* TeacherDashboard - Dashboard do Professor */
+
+.teacher-dashboard {
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.teacher-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.teacher-dashboard__title {
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.teacher-dashboard__subtitle {
+  font-size: 16px;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.teacher-dashboard__nav {
+  display: flex;
+  gap: var(--spacing-sm);
+  background: white;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.teacher-dashboard__nav-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.teacher-dashboard__nav-btn:hover {
+  background: var(--gray-100);
+}
+
+.teacher-dashboard__nav-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Stats */
+.teacher-dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Grid */
+.teacher-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.teacher-dashboard__card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.teacher-dashboard__card--full {
+  grid-column: 1 / -1;
+}
+
+.teacher-dashboard__card-title {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+/* Classrooms */
+.teacher-dashboard__classrooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.teacher-dashboard__classroom-card {
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.teacher-dashboard__classroom-card:hover {
+  border-color: var(--primary);
+}
+
+.teacher-dashboard__classroom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.teacher-dashboard__classroom-header h4 {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 4px 0;
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__classroom-header p {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.teacher-dashboard__classroom-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+}
+
+.teacher-dashboard__classroom-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.teacher-dashboard__classroom-stat .label {
+  font-size: 12px;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.teacher-dashboard__classroom-stat .value {
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+}
+
+/* Attention List */
+.teacher-dashboard__attention-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.teacher-dashboard__student-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--warning-light);
+  border-left: 4px solid var(--warning);
+  border-radius: var(--radius-md);
+}
+
+.teacher-dashboard__student-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.teacher-dashboard__student-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.teacher-dashboard__student-info h4 {
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 4px 0;
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__student-info p {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.teacher-dashboard__student-progress {
+  flex: 0 0 250px;
+}
+
+/* Classrooms Grid View */
+.teacher-dashboard__classrooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.teacher-dashboard__classroom-detail {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.teacher-dashboard__classroom-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.teacher-dashboard__classroom-detail-header h3 {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__classroom-detail-header .badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+}
+
+.teacher-dashboard__classroom-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md);
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+}
+
+.teacher-dashboard__classroom-metrics .metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.teacher-dashboard__classroom-metrics .metric-label {
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+.teacher-dashboard__classroom-metrics .metric-value {
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+}
+
+/* Students Grid */
+.teacher-dashboard__students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.teacher-dashboard__student-detail-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.teacher-dashboard__student-detail-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.teacher-dashboard__student-detail-card .header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.teacher-dashboard__student-detail-card .avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.teacher-dashboard__student-detail-card .info {
+  flex: 1;
+}
+
+.teacher-dashboard__student-detail-card .info h4 {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 4px 0;
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__student-detail-card .info p {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.teacher-dashboard__student-detail-card .attention-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px 8px;
+  background: var(--error-light);
+  color: var(--error);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+}
+
+.teacher-dashboard__student-detail-card .stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.teacher-dashboard__student-detail-card .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.teacher-dashboard__student-detail-card .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.teacher-dashboard__student-detail-card .stat-icon {
+  font-size: 24px;
+}
+
+.teacher-dashboard__student-detail-card .stat-value {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__student-detail-card .stat-label {
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+.teacher-dashboard__student-detail-card .actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.teacher-dashboard__student-detail-card .actions button {
+  flex: 1;
+}
+
+/* Activities */
+.teacher-dashboard__activities-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.teacher-dashboard__activities-header h3 {
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.teacher-dashboard__activity-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.teacher-dashboard__activity-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.teacher-dashboard__activity-card .activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.teacher-dashboard__activity-card .activity-header h4 {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  color: var(--gray-900);
+}
+
+.teacher-dashboard__activity-card .status-badge {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+}
+
+.teacher-dashboard__activity-card .status-active {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.teacher-dashboard__activity-card .status-completed {
+  background: var(--info-light);
+  color: var(--info);
+}
+
+.teacher-dashboard__activity-card .status-pending {
+  background: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.teacher-dashboard__activity-card .activity-description {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.5;
+}
+
+.teacher-dashboard__activity-card .activity-meta {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.teacher-dashboard__activity-card .meta-item {
+  font-size: 13px;
+  color: var(--gray-700);
+  padding: 4px 8px;
+  background: var(--gray-100);
+  border-radius: var(--radius-sm);
+  text-transform: capitalize;
+}
+
+.teacher-dashboard__activity-card .activity-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--gray-200);
+}
+
+.teacher-dashboard__activity-card .due-date {
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .teacher-dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-dashboard__card--full {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .teacher-dashboard {
+    padding: var(--spacing-md);
+  }
+
+  .teacher-dashboard__header {
+    flex-direction: column;
+  }
+
+  .teacher-dashboard__nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .teacher-dashboard__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-dashboard__classrooms {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-dashboard__classrooms-grid,
+  .teacher-dashboard__students-grid,
+  .teacher-dashboard__activities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-dashboard__student-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .teacher-dashboard__student-progress {
+    width: 100%;
+  }
+}
