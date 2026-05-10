@@ -85,26 +85,41 @@ if [ -d "$DEPLOY_DIR" ]; then
 fi
 
 ###############################################################################
-# 3. CLONAR/ATUALIZAR REPOSITÓRIO
+# 3. VERIFICAR/CRIAR DIRETÓRIO DO PROJETO
 ###############################################################################
-echo -e "\n${YELLOW}📥 Obtendo código fonte...${NC}"
+echo -e "\n${YELLOW}📥 Verificando código fonte...${NC}"
 
-if [ -d "$PROJECT_DIR/.git" ]; then
-    echo "Atualizando repositório existente..."
-    cd "$PROJECT_DIR"
-    git fetch origin
-    git checkout claude/voz-magica-speech-game-J6jX8
-    git pull origin claude/voz-magica-speech-game-J6jX8
-else
-    echo "Clonando repositório..."
-    mkdir -p "$(dirname $PROJECT_DIR)"
-    # Note: ajuste a URL do repositório conforme necessário
-    git clone -b claude/voz-magica-speech-game-J6jX8 \
-        http://127.0.0.1:45989/git/kkborges/voz-magica "$PROJECT_DIR" || \
-    echo -e "${YELLOW}⚠️  Clone via URL falhou. Usando diretório local.${NC}"
+# Se o diretório não existe, criá-lo
+if [ ! -d "$PROJECT_DIR" ]; then
+    echo -e "${YELLOW}⚠️  Diretório do projeto não encontrado em $PROJECT_DIR${NC}"
+    echo -e "${YELLOW}Por favor, copie o código para $PROJECT_DIR ou ajuste a variável PROJECT_DIR${NC}"
+    echo ""
+    read -p "Digite o caminho do diretório com o código (ou ENTER para sair): " custom_dir
+
+    if [ -z "$custom_dir" ]; then
+        echo "Deploy cancelado."
+        exit 1
+    fi
+
+    PROJECT_DIR="$custom_dir"
+    WEB_DIR="$PROJECT_DIR/web"
+fi
+
+if [ ! -d "$WEB_DIR" ]; then
+    echo -e "${RED}❌ Diretório web não encontrado em $WEB_DIR${NC}"
+    exit 1
 fi
 
 cd "$WEB_DIR"
+echo -e "${GREEN}✅ Código fonte encontrado em $WEB_DIR${NC}"
+
+# Se tem .git, pode atualizar
+if [ -d "$PROJECT_DIR/.git" ]; then
+    echo "Atualizando via Git..."
+    cd "$PROJECT_DIR"
+    git pull 2>/dev/null || echo -e "${YELLOW}⚠️  Não foi possível atualizar via Git (continuando mesmo assim)${NC}"
+    cd "$WEB_DIR"
+fi
 
 ###############################################################################
 # 4. CONFIGURAR VARIÁVEIS DE AMBIENTE
