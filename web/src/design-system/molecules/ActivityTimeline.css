@@ -1,0 +1,218 @@
+/* ActivityTimeline - Timeline de atividades */
+
+.activity-timeline {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+}
+
+.activity-timeline__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.activity-timeline__title {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+}
+
+.activity-timeline__view-all {
+  font-size: 14px;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.activity-timeline__view-all:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.activity-timeline__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activity-timeline__item {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.activity-timeline__item:hover {
+  background: var(--gray-50);
+}
+
+.activity-timeline__icon-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.activity-timeline__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: var(--gray-100);
+  position: relative;
+  z-index: 1;
+}
+
+.activity-timeline__icon--success {
+  background: var(--success-50);
+  color: var(--success);
+}
+
+.activity-timeline__icon--warning {
+  background: var(--warning-50);
+  color: var(--warning);
+}
+
+.activity-timeline__icon--info {
+  background: var(--info-50);
+  color: var(--info);
+}
+
+.activity-timeline__icon--error {
+  background: var(--error-50);
+  color: var(--error);
+}
+
+.activity-timeline__icon--primary {
+  background: var(--primary-50);
+  color: var(--primary);
+}
+
+.activity-timeline__line {
+  position: absolute;
+  left: 50%;
+  top: 40px;
+  bottom: -16px;
+  width: 2px;
+  background: var(--gray-200);
+  transform: translateX(-50%);
+}
+
+.activity-timeline__item:last-child .activity-timeline__line {
+  display: none;
+}
+
+.activity-timeline__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-timeline__title-text {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.activity-timeline__description {
+  font-size: 13px;
+  color: var(--gray-600);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.activity-timeline__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+.activity-timeline__time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.activity-timeline__badge {
+  padding: 2px 8px;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.activity-timeline__badge--success {
+  background: var(--success-50);
+  color: var(--success);
+}
+
+.activity-timeline__badge--warning {
+  background: var(--warning-50);
+  color: var(--warning);
+}
+
+.activity-timeline__badge--info {
+  background: var(--info-50);
+  color: var(--info);
+}
+
+.activity-timeline__badge--error {
+  background: var(--error-50);
+  color: var(--error);
+}
+
+.activity-timeline__empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--gray-500);
+}
+
+.activity-timeline__empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.activity-timeline__empty-text {
+  font-size: 14px;
+}
+
+/* Scrollbar personalizada */
+.activity-timeline__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-timeline__list::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 3px;
+}
+
+.activity-timeline__list::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+
+.activity-timeline__list::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .activity-timeline__item {
+    transition: none !important;
+  }
+}
