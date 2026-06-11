@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '@/components/common';
 import { Colors, Spacing, FontSize, FontWeight, BorderRadius } from '@/constants';
 import { GameWord } from '@/types';
+import { getWordEmoji } from '@/data/wordEmojis';
 
 interface WordCardProps {
   word: GameWord;
@@ -17,11 +18,9 @@ interface WordCardProps {
 export function WordCard({ word, showWord = true, onPlaySound }: WordCardProps) {
   return (
     <Card style={styles.container}>
-      {/* Imagem placeholder */}
+      {/* Imagem da palavra (emoji até integração das ilustrações) */}
       <View style={styles.imageContainer}>
-        <Text style={styles.imagePlaceholder}>
-          {word.category === 'animals' ? '🦁' : '🎮'}
-        </Text>
+        <Text style={styles.imagePlaceholder}>{getWordEmoji(word.id)}</Text>
       </View>
 
       {/* Palavra */}

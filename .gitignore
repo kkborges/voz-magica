@@ -137,3 +137,7 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Release keystore - NUNCA commitar
+*.keystore
+!android/app/debug.keystore

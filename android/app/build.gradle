@@ -79,15 +79,26 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            // Credenciais lidas de android/gradle.properties (NÃO commitar senhas!)
+            // Gere o keystore com: ./scripts/generate-release-keystore.sh
+            if (project.hasProperty('VOZMAGICA_RELEASE_STORE_FILE')) {
+                storeFile file(VOZMAGICA_RELEASE_STORE_FILE)
+                storePassword VOZMAGICA_RELEASE_STORE_PASSWORD
+                keyAlias VOZMAGICA_RELEASE_KEY_ALIAS
+                keyPassword VOZMAGICA_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // Usa keystore de release se configurado; senão cai no debug (apenas testes locais)
+            signingConfig project.hasProperty('VOZMAGICA_RELEASE_STORE_FILE')
+                ? signingConfigs.release
+                : signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
