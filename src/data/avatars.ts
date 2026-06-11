@@ -203,10 +203,17 @@ export const avatarPersonalities: AvatarPersonality[] = [
 ];
 
 /**
- * Obter avatar por ID
+ * Obter avatar por ID (aceita também o emoji, para perfis antigos)
  */
 export function getAvatarById(id: string): AvatarPersonality | undefined {
-  return avatarPersonalities.find(avatar => avatar.id === id);
+  return avatarPersonalities.find(avatar => avatar.id === id || avatar.emoji === id);
+}
+
+/**
+ * Obter emoji do avatar (com fallback para o valor cru)
+ */
+export function getAvatarEmoji(avatarId: string): string {
+  return getAvatarById(avatarId)?.emoji || avatarId;
 }
 
 /**

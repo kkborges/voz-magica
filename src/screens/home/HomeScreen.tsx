@@ -17,9 +17,20 @@ import { Colors, Spacing, FontSize, FontWeight, BorderRadius } from '@/constants
 import { useNavigation } from '@/hooks/useNavigation';
 import { useProfileStore } from '@/store/useProfileStore';
 import { gameModules } from '@/data/gameModules';
+import { getAvatarEmoji } from '@/data/avatars';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - Spacing.lg * 3) / 2;
+
+const MODULE_ICONS: Record<string, string> = {
+  module_animals: '🦁',
+  module_objects: '🧸',
+  module_colors: '🌈',
+  module_numbers: '🔢',
+  module_actions: '🏃',
+  module_foods: '🍰',
+  module_body: '🙋',
+};
 
 export function HomeScreen() {
   const navigation = useNavigation();
@@ -52,7 +63,7 @@ export function HomeScreen() {
             <Text style={styles.greeting}>Olá, {currentProfile.name}!</Text>
             <Text style={styles.subtitle}>O que vamos aprender hoje?</Text>
           </View>
-          <Text style={styles.avatar}>{currentProfile.avatarId}</Text>
+          <Text style={styles.avatar}>{getAvatarEmoji(currentProfile.avatarId)}</Text>
         </View>
 
         {/* Stats */}
@@ -86,9 +97,7 @@ export function HomeScreen() {
                 onPress={() => module.isUnlocked && handleModulePress(module.id)}
                 disabled={!module.isUnlocked}>
                 <Card style={styles.moduleContent}>
-                  <Text style={styles.moduleIcon}>
-                    {module.category === 'animals' ? '🦁' : '🎮'}
-                  </Text>
+                  <Text style={styles.moduleIcon}>{MODULE_ICONS[module.id] || '🎮'}</Text>
                   <Text style={styles.moduleName}>{module.name}</Text>
                   <Text style={styles.moduleDescription}>{module.description}</Text>
 
@@ -118,17 +127,6 @@ export function HomeScreen() {
                   )}
                 </Card>
               </TouchableOpacity>
-            ))}
-
-            {/* Coming Soon Cards */}
-            {['Números e Cores', 'Minhas Coisas', 'Ações'].map((title, index) => (
-              <View key={index} style={styles.moduleCard}>
-                <Card style={[styles.moduleContent, styles.comingSoon]}>
-                  <Text style={styles.moduleIcon}>🎮</Text>
-                  <Text style={styles.moduleName}>{title}</Text>
-                  <Text style={styles.comingSoonText}>Em breve!</Text>
-                </Card>
-              </View>
             ))}
           </View>
         </View>

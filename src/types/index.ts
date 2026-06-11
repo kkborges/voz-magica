@@ -15,6 +15,12 @@ export type RootStackParamList = {
   Home: undefined;
   Profile: { profileId: string };
   Game: { moduleId: string };
+  GameResults: {
+    wordsAttempted: number;
+    wordsCorrect: number;
+    starsEarned: number;
+    xpEarned: number;
+  };
   Progress: { profileId: string };
   Settings: undefined;
   ParentDashboard: undefined;

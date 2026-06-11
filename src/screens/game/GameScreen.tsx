@@ -1,8 +1,9 @@
 /**
  * Tela de jogo principal
+ * Fluxo: estímulo (TTS) → resposta (voz) → análise → feedback inteligente
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -16,16 +17,17 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import { WordCard } from '@/components/game/WordCard';
 import { VoiceRecorder } from '@/components/game/VoiceRecorder';
 import { FeedbackAnimation } from '@/components/feedback/FeedbackAnimation';
-import { Button } from '@/components/common';
-import { Colors, Spacing, FontSize, FontWeight, FEEDBACK_MESSAGES } from '@/constants';
+import { Colors, Spacing, FontSize, FontWeight } from '@/constants';
 import { useNavigation } from '@/hooks/useNavigation';
 import { useGameStore } from '@/store/useGameStore';
 import { useProfileStore } from '@/store/useProfileStore';
+import { useAchievementStore } from '@/store/useAchievementStore';
 import { getModuleById } from '@/data/gameModules';
 import VoiceRecognitionService from '@/services/voice/VoiceRecognitionService';
-import AudioService from '@/services/audio/AudioService';
-import { AttemptResult, FeedbackType, RootStackParamList } from '@/types';
-import { randomItem, generateId } from '@/utils/helpers';
+import FeedbackStrategySelector, { FeedbackPlan } from '@/services/feedback/FeedbackStrategySelector';
+import TTSService from '@/services/audio/TTSService';
+import { AttemptResult, RootStackParamList } from '@/types';
+import { generateId } from '@/utils/helpers';
 
 type GameScreenRouteProp = RouteProp<RootStackParamList, 'Game'>;
 
@@ -34,18 +36,28 @@ export function GameScreen() {
   const route = useRoute<GameScreenRouteProp>();
   const { moduleId } = route.params;
 
-  const { currentProfile } = useProfileStore();
-  const { startSession, setCurrentWord, recordAttempt, currentSession, currentWord } =
+  const { currentProfile, updateProfile } = useProfileStore();
+  const { startSession, endSession, setCurrentWord, recordAttempt, currentSession, currentWord } =
     useGameStore();
+  const { checkAchievements } = useAchievementStore();
 
-  const [module, setModule] = useState(() => getModuleById(moduleId));
+  const [module] = useState(() => getModuleById(moduleId));
   const [isListening, setIsListening] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [feedbackData, setFeedbackData] = useState<{
-    result: AttemptResult;
-    message: string;
-  } | null>(null);
+  const [feedbackPlan, setFeedbackPlan] = useState<FeedbackPlan | null>(null);
+  const [feedbackResult, setFeedbackResult] = useState<AttemptResult>(AttemptResult.PERFECT);
   const [wordIndex, setWordIndex] = useState(0);
+  const [attemptOnWord, setAttemptOnWord] = useState(0);
+
+  // Estatísticas da sessão (acumuladas localmente)
+  const sessionStats = useRef({
+    wordsAttempted: 0,
+    wordsCorrect: 0,
+    starsEarned: 0,
+    xpEarned: 0,
+    perfectCount: 0,
+    startTime: Date.now(),
+  });
 
   useEffect(() => {
     if (!module || !currentProfile) {
@@ -54,36 +66,40 @@ export function GameScreen() {
       return;
     }
 
-    // Inicia a sessão
+    TTSService.initialize();
     startSession(currentProfile.id, module);
-
-    // Define a primeira palavra
     setCurrentWord(module.words[0]);
+
+    // Apresenta a primeira palavra com voz
+    setTimeout(() => {
+      FeedbackStrategySelector.presentWord(module.words[0]);
+    }, 800);
 
     return () => {
       VoiceRecognitionService.destroy();
+      TTSService.stop();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStartListening = async () => {
     try {
+      await TTSService.stop(); // Para a voz do app antes de ouvir
       setIsListening(true);
 
       await VoiceRecognitionService.startListening(
         result => {
-          // Resultado do reconhecimento de voz
-          handleVoiceResult(result.recognizedText, result.confidence);
+          handleVoiceResult(result.recognizedText);
           setIsListening(false);
         },
         error => {
           console.error('Voice recognition error:', error);
-          Alert.alert('Erro', 'Não consegui ouvir. Tente novamente!');
           setIsListening(false);
-        }
+          TTSService.speak('Não consegui te ouvir. Vamos tentar de novo?');
+        },
       );
     } catch (error) {
       console.error('Error starting voice recognition:', error);
-      Alert.alert('Erro', 'Erro ao iniciar reconhecimento de voz');
       setIsListening(false);
     }
   };
@@ -97,17 +113,24 @@ export function GameScreen() {
     }
   };
 
-  const handleVoiceResult = (recognizedText: string, confidence: number) => {
-    if (!currentWord || !currentSession) return;
+  const handleVoiceResult = (recognizedText: string) => {
+    if (!currentWord || !currentSession || !currentProfile) return;
 
-    // Analisa similaridade
-    const analysis = VoiceRecognitionService.analyzeSimilarity(
-      currentWord.word,
-      recognizedText
+    const analysis = VoiceRecognitionService.analyzeSimilarity(currentWord.word, recognizedText);
+    const newAttemptNumber = attemptOnWord + 1;
+    setAttemptOnWord(newAttemptNumber);
+
+    // Seleciona estratégia de feedback baseada no avatar e tentativa
+    const plan = FeedbackStrategySelector.selectStrategy(
+      analysis.result,
+      currentWord,
+      newAttemptNumber,
+      currentProfile.avatarId,
+      recognizedText,
     );
 
-    // Registra tentativa
-    const attempt = {
+    // Registra a tentativa
+    recordAttempt({
       id: generateId('attempt'),
       wordId: currentWord.id,
       targetWord: currentWord.word,
@@ -115,137 +138,146 @@ export function GameScreen() {
       confidence: analysis.confidence,
       result: analysis.result,
       timestamp: new Date(),
-      attemptNumber: 1,
-      feedbackType: getFeedbackType(analysis.result),
-    };
+      attemptNumber: newAttemptNumber,
+      feedbackType: plan.type,
+    });
 
-    recordAttempt(attempt);
-
-    // Mostra feedback
-    showFeedbackForResult(analysis.result, recognizedText);
-
-    // Toca som
-    if (analysis.result === AttemptResult.PERFECT || analysis.result === AttemptResult.GOOD) {
-      AudioService.playSoundEffect('success' as any);
-    }
-  };
-
-  const getFeedbackType = (result: AttemptResult): FeedbackType => {
-    switch (result) {
-      case AttemptResult.PERFECT:
-        return FeedbackType.POSITIVE_REINFORCEMENT;
-      case AttemptResult.GOOD:
-        return FeedbackType.POSITIVE_REINFORCEMENT;
-      case AttemptResult.CLOSE:
-        return FeedbackType.SIMILAR_WORD_QUESTION;
-      default:
-        return FeedbackType.ENCOURAGEMENT;
-    }
-  };
-
-  const showFeedbackForResult = (result: AttemptResult, recognizedText: string) => {
-    let message = '';
-
-    switch (result) {
-      case AttemptResult.PERFECT:
-        message = randomItem(FEEDBACK_MESSAGES.perfect);
-        break;
-      case AttemptResult.GOOD:
-        message = randomItem(FEEDBACK_MESSAGES.good);
-        break;
-      case AttemptResult.CLOSE:
-        message = `Você disse "${recognizedText}"? Vamos tentar "${currentWord?.word}"!`;
-        break;
-      default:
-        message = randomItem(FEEDBACK_MESSAGES.encouragement);
+    // Acumula estatísticas
+    const stats = sessionStats.current;
+    stats.wordsAttempted += 1;
+    stats.starsEarned += plan.starsAwarded;
+    stats.xpEarned += plan.xpAwarded;
+    if (analysis.result === AttemptResult.PERFECT) {
+      stats.perfectCount += 1;
+      stats.wordsCorrect += 1;
+    } else if (analysis.result === AttemptResult.GOOD) {
+      stats.wordsCorrect += 1;
     }
 
-    setFeedbackData({ result, message });
+    // Entrega feedback (visual + voz)
+    setFeedbackResult(analysis.result);
+    setFeedbackPlan(plan);
     setShowFeedback(true);
+    FeedbackStrategySelector.deliverSpokenFeedback(plan, currentWord);
   };
 
   const handleFeedbackComplete = () => {
+    const plan = feedbackPlan;
     setShowFeedback(false);
-    setFeedbackData(null);
+    setFeedbackPlan(null);
 
-    // Avança para próxima palavra se acertou
-    if (
-      feedbackData?.result === AttemptResult.PERFECT ||
-      feedbackData?.result === AttemptResult.GOOD
-    ) {
+    if (plan?.shouldAdvance) {
       handleNextWord();
     }
   };
 
-  const handleNextWord = () => {
+  const handleNextWord = async () => {
     if (!module) return;
 
     const nextIndex = wordIndex + 1;
+    setAttemptOnWord(0);
 
     if (nextIndex >= module.words.length) {
-      // Finalizou o módulo
-      Alert.alert(
-        'Parabéns!',
-        'Você completou todas as palavras! 🎉',
-        [
-          {
-            text: 'Voltar',
-            onPress: () => navigation.goBack(),
-          },
-        ]
-      );
+      await finishSession();
     } else {
       setWordIndex(nextIndex);
       setCurrentWord(module.words[nextIndex]);
+
+      // Apresenta próxima palavra com voz
+      setTimeout(() => {
+        FeedbackStrategySelector.presentWord(module.words[nextIndex]);
+      }, 500);
     }
   };
 
+  const finishSession = async () => {
+    const stats = sessionStats.current;
+    const playTimeMinutes = Math.max(1, Math.round((Date.now() - stats.startTime) / 60000));
+
+    // Atualiza perfil com estatísticas acumuladas
+    if (currentProfile) {
+      const updatedProfile = {
+        ...currentProfile,
+        lastActiveAt: new Date(),
+        stats: {
+          ...currentProfile.stats,
+          totalWordsAttempted: currentProfile.stats.totalWordsAttempted + stats.wordsAttempted,
+          totalWordsSuccess: currentProfile.stats.totalWordsSuccess + stats.wordsCorrect,
+          totalPlayTime: currentProfile.stats.totalPlayTime + playTimeMinutes,
+          starsEarned: currentProfile.stats.starsEarned + stats.starsEarned,
+          experiencePoints: currentProfile.stats.experiencePoints + stats.xpEarned,
+        },
+      };
+      await updateProfile(updatedProfile);
+
+      // Verifica conquistas desbloqueadas
+      await checkAchievements(updatedProfile.stats, stats.perfectCount);
+    }
+
+    await endSession();
+
+    navigation.navigate('GameResults', {
+      wordsAttempted: stats.wordsAttempted,
+      wordsCorrect: stats.wordsCorrect,
+      starsEarned: stats.starsEarned,
+      xpEarned: stats.xpEarned,
+    });
+  };
+
   const handlePlaySound = () => {
-    // TODO: Implementar reprodução de áudio
-    console.log('Play sound for word:', currentWord?.word);
+    if (currentWord) {
+      TTSService.speakWordSlowly(currentWord.word);
+    }
+  };
+
+  const handleExit = () => {
+    Alert.alert('Sair do jogo?', 'Seu progresso nesta sessão será salvo.', [
+      { text: 'Continuar jogando', style: 'cancel' },
+      { text: 'Sair', onPress: finishSession },
+    ]);
   };
 
   if (!module || !currentWord) {
     return null;
   }
 
+  const showSyllableHelp = feedbackPlan?.showSyllables && showFeedback;
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backButton}>← Voltar</Text>
+        <TouchableOpacity onPress={handleExit}>
+          <Text style={styles.backButton}>← Sair</Text>
         </TouchableOpacity>
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>
             {wordIndex + 1} / {module.words.length}
           </Text>
         </View>
-        <View style={styles.placeholder} />
+        <View style={styles.starsBadge}>
+          <Text style={styles.starsText}>⭐ {sessionStats.current.starsEarned}</Text>
+        </View>
       </View>
 
       {/* Content */}
       <View style={styles.content}>
-        {/* Palavra atual */}
-        <WordCard
-          word={currentWord}
-          showWord={true}
-          onPlaySound={handlePlaySound}
-        />
+        <WordCard word={currentWord} showWord={true} onPlaySound={handlePlaySound} />
 
-        {/* Gravador de voz */}
         <View style={styles.recorderContainer}>
           <VoiceRecorder
             isListening={isListening}
             onStartListening={handleStartListening}
             onStopListening={handleStopListening}
+            disabled={showFeedback}
           />
         </View>
 
-        {/* Dica */}
         {currentWord.hints && currentWord.hints.length > 0 && (
           <View style={styles.hintContainer}>
-            <Text style={styles.hintText}>💡 {currentWord.hints[0].content}</Text>
+            <Text style={styles.hintText}>
+              💡 {currentWord.hints.find(h => h.type === 'context')?.content}
+            </Text>
           </View>
         )}
       </View>
@@ -257,12 +289,23 @@ export function GameScreen() {
         animationType="fade"
         onRequestClose={handleFeedbackComplete}>
         <View style={styles.modalOverlay}>
-          {feedbackData && (
-            <FeedbackAnimation
-              result={feedbackData.result}
-              message={feedbackData.message}
-              onComplete={handleFeedbackComplete}
-            />
+          {feedbackPlan && (
+            <View style={styles.feedbackContainer}>
+              <FeedbackAnimation
+                result={feedbackResult}
+                message={feedbackPlan.message}
+                onComplete={handleFeedbackComplete}
+              />
+              {showSyllableHelp && (
+                <View style={styles.syllableContainer}>
+                  {currentWord.syllables.map((syllable, index) => (
+                    <View key={index} style={styles.syllableBox}>
+                      <Text style={styles.syllableText}>{syllable}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
           )}
         </View>
       </Modal>
@@ -298,8 +341,16 @@ const styles = StyleSheet.create({
     color: Colors.textOnPrimary,
     fontWeight: FontWeight.bold,
   },
-  placeholder: {
-    width: 60,
+  starsBadge: {
+    backgroundColor: Colors.warningLight,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: 20,
+  },
+  starsText: {
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.bold,
+    color: Colors.text,
   },
   content: {
     flex: 1,
@@ -308,7 +359,7 @@ const styles = StyleSheet.create({
   },
   recorderContainer: {
     alignItems: 'center',
-    marginVertical: Spacing.xl,
+    marginVertical: Spacing.lg,
   },
   hintContainer: {
     backgroundColor: Colors.infoLight,
@@ -326,5 +377,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  feedbackContainer: {
+    alignItems: 'center',
+  },
+  syllableContainer: {
+    flexDirection: 'row',
+    marginTop: Spacing.lg,
+  },
+  syllableBox: {
+    backgroundColor: Colors.surface,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderRadius: 12,
+    marginHorizontal: Spacing.xs,
+    borderWidth: 3,
+    borderColor: Colors.accent,
+  },
+  syllableText: {
+    fontSize: FontSize.xl,
+    fontWeight: FontWeight.bold,
+    color: Colors.primary,
   },
 });

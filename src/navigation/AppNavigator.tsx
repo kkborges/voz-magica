@@ -11,6 +11,10 @@ import { WelcomeScreen } from '@/screens/onboarding/WelcomeScreen';
 import { CreateProfileScreen } from '@/screens/profile/CreateProfileScreen';
 import { HomeScreen } from '@/screens/home/HomeScreen';
 import { GameScreen } from '@/screens/game/GameScreen';
+import { GameResultsScreen } from '@/screens/game/GameResultsScreen';
+import { ProgressScreen } from '@/screens/progress/ProgressScreen';
+import { SettingsScreen } from '@/screens/settings/SettingsScreen';
+import { ParentDashboardScreen } from '@/screens/parent/ParentDashboardScreen';
 
 // Placeholder screens - serão implementados depois
 const PlaceholderScreen = () => null;
@@ -39,7 +43,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="ProgressTab"
-        component={PlaceholderScreen}
+        component={ProgressScreen}
         options={{
           tabBarLabel: 'Progresso',
           tabBarIcon: ({ color }) => null, // TODO: Add icon
@@ -47,7 +51,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="SettingsTab"
-        component={PlaceholderScreen}
+        component={SettingsScreen}
         options={{
           tabBarLabel: 'Ajustes',
           tabBarIcon: ({ color }) => null, // TODO: Add icon
@@ -71,11 +75,12 @@ export function RootNavigator() {
       <Stack.Screen name="CreateProfile" component={CreateProfileScreen} />
       <Stack.Screen name="Home" component={MainTabs} />
       <Stack.Screen name="Game" component={GameScreen} />
+      <Stack.Screen name="GameResults" component={GameResultsScreen} />
       <Stack.Screen name="Profile" component={PlaceholderScreen} />
       <Stack.Screen name="EditProfile" component={PlaceholderScreen} />
-      <Stack.Screen name="Progress" component={PlaceholderScreen} />
-      <Stack.Screen name="Settings" component={PlaceholderScreen} />
-      <Stack.Screen name="ParentDashboard" component={PlaceholderScreen} />
+      <Stack.Screen name="Progress" component={ProgressScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} />
       <Stack.Screen name="RewardShop" component={PlaceholderScreen} />
       <Stack.Screen name="DailyChallenge" component={PlaceholderScreen} />
     </Stack.Navigator>

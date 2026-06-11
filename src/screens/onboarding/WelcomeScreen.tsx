@@ -2,15 +2,28 @@
  * Tela de boas-vindas - Primeira tela do app
  */
 
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/common';
-import { Colors, Spacing, FontSize, FontWeight, BorderRadius } from '@/constants';
+import { Colors, Spacing, FontSize, FontWeight } from '@/constants';
 import { useNavigation } from '@/hooks/useNavigation';
+import { useProfileStore } from '@/store/useProfileStore';
 
 export function WelcomeScreen() {
   const navigation = useNavigation();
+  const { loadProfiles, currentProfile, isLoading } = useProfileStore();
+
+  useEffect(() => {
+    loadProfiles();
+  }, [loadProfiles]);
+
+  useEffect(() => {
+    // Se já existe perfil ativo, vai direto para a Home
+    if (!isLoading && currentProfile) {
+      navigation.navigate('Home');
+    }
+  }, [isLoading, currentProfile, navigation]);
 
   const handleStart = () => {
     navigation.navigate('CreateProfile');

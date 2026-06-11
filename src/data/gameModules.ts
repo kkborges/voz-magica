@@ -9,6 +9,8 @@ import {
   colorsModule,
   numbersModule,
   actionsModule,
+  foodsModule,
+  bodyModule,
 } from './allGames';
 
 /**
@@ -39,7 +41,9 @@ export const gameModules: GameModule[] = [
   objectsModule,     // Módulo 2
   colorsModule,      // Módulo 3
   numbersModule,     // Módulo 4
-  actionsModule,     // Módulo 5
+  actionsModule,     // Módulo 5 - 10 estrelas
+  foodsModule,       // Módulo 6 - 20 estrelas
+  bodyModule,        // Módulo 7 - 30 estrelas
 ];
 
 /**

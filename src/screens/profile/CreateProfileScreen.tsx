@@ -19,15 +19,14 @@ import { useNavigation } from '@/hooks/useNavigation';
 import { useProfileStore } from '@/store/useProfileStore';
 import { AgeGroup, FontSize as ProfileFontSize, VoiceType } from '@/types';
 import { generateId } from '@/utils/helpers';
-
-const AVATARS = ['🦁', '🐯', '🐻', '🐼', '🐨', '🐸', '🦊', '🐱'];
+import { avatarPersonalities } from '@/data/avatars';
 
 export function CreateProfileScreen() {
   const navigation = useNavigation();
   const { addProfile, setCurrentProfile } = useProfileStore();
 
   const [name, setName] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0]);
+  const [selectedAvatar, setSelectedAvatar] = useState(avatarPersonalities[0].id);
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<AgeGroup>(AgeGroup.FOUR_TO_FIVE);
 
   const handleCreate = async () => {
@@ -96,20 +95,26 @@ export function CreateProfileScreen() {
 
         {/* Avatar */}
         <Card style={styles.section}>
-          <Text style={styles.sectionTitle}>Escolha seu avatar!</Text>
+          <Text style={styles.sectionTitle}>Escolha seu amiguinho!</Text>
           <View style={styles.avatarGrid}>
-            {AVATARS.map(avatar => (
+            {avatarPersonalities.map(avatar => (
               <TouchableOpacity
-                key={avatar}
+                key={avatar.id}
                 style={[
                   styles.avatarOption,
-                  selectedAvatar === avatar && styles.avatarOptionSelected,
+                  selectedAvatar === avatar.id && styles.avatarOptionSelected,
                 ]}
-                onPress={() => setSelectedAvatar(avatar)}>
-                <Text style={styles.avatarEmoji}>{avatar}</Text>
+                onPress={() => setSelectedAvatar(avatar.id)}>
+                <Text style={styles.avatarEmoji}>{avatar.emoji}</Text>
+                <Text style={styles.avatarName} numberOfLines={1}>
+                  {avatar.name.split(' ')[0]}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
+          <Text style={styles.avatarPersonality}>
+            {avatarPersonalities.find(a => a.id === selectedAvatar)?.personality}
+          </Text>
         </Card>
 
         {/* Idade */}
@@ -220,7 +225,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.successLight,
   },
   avatarEmoji: {
-    fontSize: 40,
+    fontSize: 36,
+  },
+  avatarName: {
+    fontSize: 10,
+    color: Colors.textSecondary,
+    marginTop: 2,
+  },
+  avatarPersonality: {
+    fontSize: FontSize.sm,
+    color: Colors.primary,
+    textAlign: 'center',
+    fontWeight: FontWeight.medium,
+    marginTop: Spacing.sm,
   },
   ageGroup: {
     flexDirection: 'row',
