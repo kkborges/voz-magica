@@ -22,7 +22,6 @@ class TTSService {
   };
 
   private isInitialized = false;
-  private speakQueue: string[] = [];
 
   /**
    * Inicializa o TTS

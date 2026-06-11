@@ -22,57 +22,115 @@ import { GameSession, AttemptResult } from '@/types';
 import { formatPlayTime, calculateAccuracyRate } from '@/utils/helpers';
 import { getAvatarEmoji } from '@/data/avatars';
 
-const DEFAULT_PIN = '1234'; // TODO: Configurável no primeiro acesso
+type PinMode = 'loading' | 'create' | 'confirm' | 'enter' | 'authenticated';
 
 export function ParentDashboardScreen() {
   const navigation = useNavigation();
   const { currentProfile } = useProfileStore();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pinMode, setPinMode] = useState<PinMode>('loading');
   const [pin, setPin] = useState('');
-  const [pinError, setPinError] = useState(false);
+  const [firstPin, setFirstPin] = useState('');
+  const [pinError, setPinError] = useState('');
   const [sessions, setSessions] = useState<GameSession[]>([]);
 
   useEffect(() => {
-    if (isAuthenticated && currentProfile) {
+    // Verifica se já existe PIN configurado
+    StorageService.getParentPin().then(savedPin => {
+      setPinMode(savedPin ? 'enter' : 'create');
+    });
+  }, []);
+
+  useEffect(() => {
+    if (pinMode === 'authenticated' && currentProfile) {
       StorageService.getSessionsByProfile(currentProfile.id).then(setSessions);
     }
-  }, [isAuthenticated, currentProfile]);
+  }, [pinMode, currentProfile]);
 
-  const handlePinSubmit = () => {
-    if (pin === DEFAULT_PIN) {
-      setIsAuthenticated(true);
-      setPinError(false);
-    } else {
-      setPinError(true);
+  const handlePinSubmit = async () => {
+    if (pin.length !== 4) {
+      setPinError('O PIN deve ter 4 dígitos.');
+      return;
+    }
+
+    if (pinMode === 'create') {
+      // Primeira etapa da criação: guarda e pede confirmação
+      setFirstPin(pin);
       setPin('');
+      setPinError('');
+      setPinMode('confirm');
+    } else if (pinMode === 'confirm') {
+      // Confirma o PIN criado
+      if (pin === firstPin) {
+        await StorageService.setParentPin(pin);
+        setPinError('');
+        setPinMode('authenticated');
+      } else {
+        setPinError('Os PINs não conferem. Vamos começar de novo.');
+        setPin('');
+        setFirstPin('');
+        setPinMode('create');
+      }
+    } else {
+      // Verificação de PIN existente
+      const savedPin = await StorageService.getParentPin();
+      if (pin === savedPin) {
+        setPinError('');
+        setPinMode('authenticated');
+      } else {
+        setPinError('PIN incorreto. Tente novamente.');
+        setPin('');
+      }
     }
   };
 
-  // ===== Tela de PIN =====
-  if (!isAuthenticated) {
+  const handleChangePin = () => {
+    setPin('');
+    setFirstPin('');
+    setPinError('');
+    setPinMode('create');
+  };
+
+  // ===== Tela de PIN (criar / confirmar / entrar) =====
+  if (pinMode !== 'authenticated') {
+    const titles: Record<string, { title: string; subtitle: string }> = {
+      loading: { title: 'Área dos Pais', subtitle: 'Carregando...' },
+      create: { title: 'Criar PIN', subtitle: 'Escolha um PIN de 4 dígitos para proteger esta área' },
+      confirm: { title: 'Confirmar PIN', subtitle: 'Digite o mesmo PIN novamente' },
+      enter: { title: 'Área dos Pais', subtitle: 'Digite seu PIN para acessar' },
+    };
+    const { title, subtitle } = titles[pinMode];
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.pinContainer}>
           <Text style={styles.pinIcon}>🔒</Text>
-          <Text style={styles.pinTitle}>Área dos Pais</Text>
-          <Text style={styles.pinSubtitle}>Digite o PIN para acessar</Text>
+          <Text style={styles.pinTitle}>{title}</Text>
+          <Text style={styles.pinSubtitle}>{subtitle}</Text>
 
-          <TextInput
-            style={[styles.pinInput, pinError && styles.pinInputError]}
-            value={pin}
-            onChangeText={setPin}
-            keyboardType="number-pad"
-            maxLength={4}
-            secureTextEntry
-            placeholder="• • • •"
-            placeholderTextColor={Colors.textDisabled}
-          />
+          {pinMode !== 'loading' && (
+            <>
+              <TextInput
+                style={[styles.pinInput, !!pinError && styles.pinInputError]}
+                value={pin}
+                onChangeText={setPin}
+                keyboardType="number-pad"
+                maxLength={4}
+                secureTextEntry
+                placeholder="• • • •"
+                placeholderTextColor={Colors.textDisabled}
+              />
 
-          {pinError && <Text style={styles.pinErrorText}>PIN incorreto. Tente novamente.</Text>}
-          <Text style={styles.pinHint}>PIN padrão: 1234</Text>
+              {!!pinError && <Text style={styles.pinErrorText}>{pinError}</Text>}
 
-          <Button title="Entrar" onPress={handlePinSubmit} size="large" style={styles.pinButton} />
+              <Button
+                title={pinMode === 'enter' ? 'Entrar' : 'Continuar'}
+                onPress={handlePinSubmit}
+                size="large"
+                style={styles.pinButton}
+              />
+            </>
+          )}
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.backLink}>Voltar</Text>
           </TouchableOpacity>
@@ -120,9 +178,14 @@ export function ParentDashboardScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>Painel dos Pais</Text>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backLink}>Fechar</Text>
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity onPress={handleChangePin}>
+              <Text style={styles.backLink}>Trocar PIN</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text style={styles.backLink}>  Fechar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <Text style={styles.subtitle}>
@@ -291,6 +354,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  headerActions: {
+    flexDirection: 'row',
   },
   title: {
     fontSize: FontSize.xxl,

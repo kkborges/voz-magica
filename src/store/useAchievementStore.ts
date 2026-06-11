@@ -4,7 +4,7 @@
  */
 
 import { create } from 'zustand';
-import { Achievement, AchievementCategory, ProfileStats } from '@/types';
+import { Achievement, ProfileStats } from '@/types';
 import { achievements as achievementCatalog } from '@/data/achievements';
 import StorageService from '@/services/storage/StorageService';
 

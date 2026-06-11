@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { Text, StyleSheet, Animated } from 'react-native';
 import { AttemptResult } from '@/types';
 import { Colors, FontSize, FontWeight, Spacing } from '@/constants';
 

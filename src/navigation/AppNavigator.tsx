@@ -38,7 +38,7 @@ function MainTabs() {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Início',
-          tabBarIcon: ({ color }) => null, // TODO: Add icon
+          tabBarIcon: () => null, // TODO: Add icon
         }}
       />
       <Tab.Screen
@@ -46,7 +46,7 @@ function MainTabs() {
         component={ProgressScreen}
         options={{
           tabBarLabel: 'Progresso',
-          tabBarIcon: ({ color }) => null, // TODO: Add icon
+          tabBarIcon: () => null, // TODO: Add icon
         }}
       />
       <Tab.Screen
@@ -54,7 +54,7 @@ function MainTabs() {
         component={SettingsScreen}
         options={{
           tabBarLabel: 'Ajustes',
-          tabBarIcon: ({ color }) => null, // TODO: Add icon
+          tabBarIcon: () => null, // TODO: Add icon
         }}
       />
     </Tab.Navigator>

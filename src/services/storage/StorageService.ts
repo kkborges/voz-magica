@@ -24,6 +24,7 @@ class StorageService {
     EXERCISE_PLANS: '@voz_magica:exercise_plans',
     SETTINGS: '@voz_magica:settings',
     ONBOARDING_COMPLETED: '@voz_magica:onboarding_completed',
+    PARENT_PIN: '@voz_magica:parent_pin',
   };
 
   /**
@@ -48,18 +49,6 @@ class StorageService {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       console.error(`Error reading ${key}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Remove um item do storage
-   */
-  private async removeItem(key: string): Promise<void> {
-    try {
-      await AsyncStorage.removeItem(key);
-    } catch (error) {
-      console.error(`Error removing ${key}:`, error);
       throw error;
     }
   }
@@ -218,6 +207,23 @@ class StorageService {
   async getExercisePlans(): Promise<ExercisePlan[]> {
     const plans = await this.getItem<ExercisePlan[]>(this.KEYS.EXERCISE_PLANS);
     return plans || [];
+  }
+
+  // ==================== PIN dos Pais ====================
+
+  /**
+   * Salva o PIN do painel dos pais
+   * TODO: aplicar hash (bcrypt) antes do lançamento em produção
+   */
+  async setParentPin(pin: string): Promise<void> {
+    await this.setItem(this.KEYS.PARENT_PIN, pin);
+  }
+
+  /**
+   * Recupera o PIN dos pais (null se nunca configurado)
+   */
+  async getParentPin(): Promise<string | null> {
+    return await this.getItem<string>(this.KEYS.PARENT_PIN);
   }
 
   // ==================== Configurações ====================

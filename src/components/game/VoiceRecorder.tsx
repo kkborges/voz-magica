@@ -2,9 +2,9 @@
  * Componente de gravação de voz
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { Colors, Spacing, FontSize, BorderRadius } from '@/constants';
+import { Colors, Spacing, FontSize } from '@/constants';
 
 interface VoiceRecorderProps {
   isListening: boolean;

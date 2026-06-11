@@ -166,7 +166,7 @@ class VoiceRecognitionService {
    */
   async isAvailable(): Promise<boolean> {
     try {
-      return await Voice.isAvailable();
+      return !!(await Voice.isAvailable());
     } catch {
       return false;
     }
@@ -259,7 +259,7 @@ class VoiceRecognitionService {
   /**
    * Gera sugestões de palavras similares
    */
-  private getSimilarWordSuggestions(target: string, recognized: string): string[] {
+  private getSimilarWordSuggestions(target: string, _recognized: string): string[] {
     const suggestions: string[] = [];
 
     // TODO: Implementar lógica mais sofisticada
@@ -275,7 +275,7 @@ class VoiceRecognitionService {
   async analyzePhonemes(
     target: string,
     recognized: string,
-    audioData?: Blob,
+    _audioData?: Blob,
   ): Promise<PhonemeAnalysis[]> {
     // TODO: Integrar com API de análise fonética
     // Por enquanto, retorna análise básica baseada em texto

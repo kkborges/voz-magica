@@ -11,6 +11,14 @@ import {
   actionsModule,
   foodsModule,
   bodyModule,
+  vowelsModule,
+  animalSoundsModule,
+  rhymesModule,
+  consonantsModule,
+  sequencesModule,
+  memoryModule,
+  conversationModule,
+  tongueTwistersModule,
 } from './allGames';
 
 /**
@@ -37,13 +45,21 @@ export const animalModule: GameModule = {
  * Lista de todos os módulos
  */
 export const gameModules: GameModule[] = [
-  animalModule,      // Módulo 1 - Sempre desbloqueado
-  objectsModule,     // Módulo 2
-  colorsModule,      // Módulo 3
-  numbersModule,     // Módulo 4
-  actionsModule,     // Módulo 5 - 10 estrelas
-  foodsModule,       // Módulo 6 - 20 estrelas
-  bodyModule,        // Módulo 7 - 30 estrelas
+  animalModule,         // 1 - Sempre desbloqueado
+  vowelsModule,         // 2 - Desbloqueado (base fonética)
+  animalSoundsModule,   // 3 - Desbloqueado (onomatopeias)
+  objectsModule,        // 4 - Desbloqueado
+  colorsModule,         // 5 - Desbloqueado
+  numbersModule,        // 6 - Desbloqueado
+  actionsModule,        // 7 - 10 estrelas
+  foodsModule,          // 8 - 20 estrelas
+  bodyModule,           // 9 - 30 estrelas
+  rhymesModule,         // 10 - 40 estrelas
+  consonantsModule,     // 11 - 50 estrelas
+  sequencesModule,      // 12 - 60 estrelas
+  memoryModule,         // 13 - 70 estrelas
+  conversationModule,   // 14 - 80 estrelas
+  tongueTwistersModule, // 15 - 100 estrelas (desafio final!)
 ];
 
 /**

@@ -24,12 +24,20 @@ const CARD_WIDTH = (width - Spacing.lg * 3) / 2;
 
 const MODULE_ICONS: Record<string, string> = {
   module_animals: '🦁',
+  module_vowels: '🔤',
+  module_animal_sounds: '🐾',
   module_objects: '🧸',
   module_colors: '🌈',
   module_numbers: '🔢',
   module_actions: '🏃',
   module_foods: '🍰',
   module_body: '🙋',
+  module_rhymes: '🎵',
+  module_consonants: '📝',
+  module_sequences: '🔄',
+  module_memory: '🧠',
+  module_conversation: '💬',
+  module_tongue_twisters: '😛',
 };
 
 export function HomeScreen() {

@@ -1,3 +1,5 @@
+import { GameWord } from './game';
+
 /**
  * Conta dos pais/responsáveis
  */

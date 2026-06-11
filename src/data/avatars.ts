@@ -3,8 +3,6 @@
  * Baseado na versão web v1.1.0
  */
 
-import { Avatar } from '@/types';
-
 export interface AvatarPersonality {
   id: string;
   name: string;

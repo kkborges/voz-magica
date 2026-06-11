@@ -10,7 +10,6 @@ import {
   GameAttempt,
   GameWord,
   AttemptResult,
-  FeedbackType,
 } from '@/types';
 import StorageService from '@/services/storage/StorageService';
 
